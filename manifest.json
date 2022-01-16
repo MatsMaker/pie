@@ -1,0 +1,26 @@
+{
+  "name": "PIE",
+  "description": "Developer Tools for modifying display objects written with Pixi.js",
+  "version": "1.0",
+  "manifest_version": 3,
+  "icons": {
+    "16": "icons/Cake-Chocolate-icon16.png",
+    "48": "icons/Cake-Chocolate-icon48.png",
+    "128": "icons/Cake-Chocolate-icon.png"
+  },
+  "content_scripts": [
+    {
+      "all_frames": true,
+      "matches": ["*://*/*"],
+      "run_at": "document_start",
+      "js": ["inject.js"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "matches": ["*://*/*"],
+      "resources": ["js/edit-tool.js"]
+    }
+  ],
+  "permissions": ["activeTab"]
+}
