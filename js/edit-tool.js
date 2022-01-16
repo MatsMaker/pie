@@ -14,7 +14,7 @@ How use
 */
 
 function editTool() {
-  console.log("PE is active");
+  console.log("PIE is active");
   const targetListener = window;
 
   const controlKeys = {

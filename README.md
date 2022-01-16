@@ -25,6 +25,7 @@ window.PIEaddToList && window.PIEaddToList(container);
 /// #endif
 ...
 ```
+
 Then we can use hot key for fast modify object
 
 ### Hotkeys list:
@@ -38,3 +39,13 @@ Then we can use hot key for fast modify object
 - Select edited item:
   next item - key 'f'
   prev item - key 'd'
+
+## Note, Attention
+
+When the extension is active you can't use some keys(from hotkey list) with default behavior. Because extension intercepted their behavior
+
+### To more comfortable
+
+Set activation extension by click.
+##### For it
+Click by extension in bar. Then "The can reed and change data" set "When you click the extension". After turn on this extension when it need and don't block keys from hotkey list on all sites.
