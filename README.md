@@ -19,9 +19,9 @@ container.addChild(circle);
 ...
 /// #if DEBUG
 // To add Display object to PIE edit list
-window.PIEaddToList && window.PIEaddToList(circle);
+window.___PIE___ && window.___PIE___.ADD(circle);
 // and other do
-window.PIEaddToList && window.PIEaddToList(container);
+window.___PIE___ && window.___PIE___.ADD(container);
 /// #endif
 ...
 ```

@@ -25,8 +25,8 @@ function editTool() {
     scale: "e",
     visible: "v",
     itemsToLog: " ", // space
-    scaleSensitivity: 1 / 1000,
-    rotationSensitivity: 1 / 150,
+    scaleSensitivity: 1 / 100,
+    rotationSensitivity: 1 / 5,
   };
 
   const editState = {
@@ -46,6 +46,8 @@ function editTool() {
 
   function blinkActiveItem() {
     const activeItem = getActiveItem();
+    if (activeItem === undefined) return;
+
     const startStatus = activeItem.visible;
     setTimeout(function () {
       activeItem.visible = !activeItem.visible;
@@ -86,14 +88,14 @@ function editTool() {
           x: editState.mousePosition.x - event.x,
           y: editState.mousePosition.y - event.y,
         };
-        activeItem.position.x += mouseDelta.x;
-        activeItem.position.y += mouseDelta.y;
+        activeItem.position.x -= mouseDelta.x;
+        activeItem.position.y -= mouseDelta.y;
         break;
       }
 
       case "rotation": {
         const mouseYDelta = editState.mousePosition.y - event.y;
-        activeItem.angle += mouseYDelta * controlKeys.rotationSensitivity;
+        activeItem.angle -= mouseYDelta * controlKeys.rotationSensitivity;
         break;
       }
 
@@ -105,9 +107,9 @@ function editTool() {
           y: editState.mousePosition.y - event.y,
         };
         activeItem.scale.x =
-          activeItem.scale.x + mouseDelta.x * controlKeys.scaleSensitivity;
+          activeItem.scale.x - mouseDelta.x * controlKeys.scaleSensitivity;
         activeItem.scale.y =
-          activeItem.scale.y + mouseDelta.y * controlKeys.scaleSensitivity;
+          activeItem.scale.y - mouseDelta.y * controlKeys.scaleSensitivity;
         break;
       }
 
@@ -129,7 +131,7 @@ function editTool() {
 
   function onSetMod(event) {
     switch (event.key.toLowerCase()) {
-      case controlKeys.nextItem:
+      case controlKeys.nextItem: {
         editState.activeItemIndex = Math.min(
           editState.activeItemIndex + 1,
           editState.editObjects.length - 1
@@ -138,31 +140,36 @@ function editTool() {
         event.stopPropagation();
         event.preventDefault();
         break;
+      }
 
-      case controlKeys.prevItem:
+      case controlKeys.prevItem: {
         editState.activeItemIndex = Math.max(editState.activeItemIndex - 1, 0);
         blinkActiveItem();
         event.stopPropagation();
         event.preventDefault();
         break;
+      }
 
-      case controlKeys.scale:
+      case controlKeys.scale: {
         editState.mod = "scale";
         event.stopPropagation();
         event.preventDefault();
         break;
+      }
 
-      case controlKeys.move:
+      case controlKeys.move: {
         editState.mod = "move";
         event.stopPropagation();
         event.preventDefault();
         break;
+      }
 
-      case controlKeys.rotation:
+      case controlKeys.rotation: {
         editState.mod = "rotation";
         event.stopPropagation();
         event.preventDefault();
         break;
+      }
 
       case controlKeys.visible: {
         const activeItem = getActiveItem();
@@ -178,7 +185,7 @@ function editTool() {
           : getActiveItem();
 
         // eslint-disable-next-line
-        console.log("editTool: ", dataToLog);
+        console.log("PIE: ", dataToLog);
         event.stopPropagation();
         event.preventDefault();
         break;
@@ -203,8 +210,13 @@ function editTool() {
   targetListener.addEventListener("keydown", onSetMod);
   targetListener.addEventListener("keyup", onUnsetMod);
 
-  return function (item) {
-    editState.editObjects.push(item);
-  }.bind(this);
+  return {
+    ADD: function (item) {
+      editState.editObjects.push(item);
+    }.bind(this),
+    SET: function (item) {
+      editState.editObjects = [item];
+    }.bind(this),
+  };
 }
-window.PIEaddToList = editTool();
+window.___PIE___ = editTool();
