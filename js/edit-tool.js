@@ -41,7 +41,11 @@ function editTool() {
   };
 
   function getActiveItem() {
-    return editState.editObjects[editState.activeItemIndex];
+    if (editState.editObjects[editState.activeItemIndex]) {
+      return editState.editObjects[editState.activeItemIndex];
+    } else {
+      return window.$pixi;
+    }
   }
 
   function blinkActiveItem() {
