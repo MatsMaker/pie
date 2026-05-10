@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PIE Extension Test - Pixi.js Demo</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #2c3e50;
+        }
+        #info {
+            color: white;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            max-width: 800px;
+        }
+        #info h2 {
+            margin-top: 0;
+        }
+        #info code {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        #info ul {
+            margin: 10px 0;
+        }
+        #info li {
+            margin: 5px 0;
+        }
+        canvas {
+            border: 2px solid #34495e;
+            display: block;
+            background: white;
+        }
+    </style>
+</head>
+<body>
+    <div id="info">
+        <h2>🍰 PIE Extension Test Page</h2>
+        <p>This page contains a simple Pixi.js application. Use the PIE extension to edit the objects:</p>
+        <ul>
+            <li><code>E</code> + mouse - Scale object (hold Shift for uniform scaling)</li>
+            <li><code>W</code> + mouse - Move object</li>
+            <li><code>Q</code> + mouse - Rotate object</li>
+            <li><code>V</code> - Toggle visibility</li>
+            <li><code>F</code> - Select next item</li>
+            <li><code>D</code> - Select previous item</li>
+            <li><code>Space</code> - Log active item (Shift+Space for all items)</li>
+        </ul>
+        <p><strong>Note:</strong> Make sure the PIE extension is loaded in Chrome!</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/pixi.js@7.x/dist/pixi.min.js"></script>
+    <script>
+        // Create the Pixi application
+        const app = new PIXI.Application({
+            width: 800,
+            height: 600,
+            backgroundColor: 0xecf0f1,
+            antialias: true
+        });
+
+        document.body.appendChild(app.view);
+
+        // Make PIXI globally accessible for PIE extension
+        window.$pixi = app.stage;
+
+        // Hooks for Pixi DevTools
+        window.__PIXI_APP__ = app;
+        window.__PIXI_STAGE__ = app.stage;
+        window.PIXI = PIXI;
+        
+        // Enable devtools
+        if (window.__PIXI_DEVTOOLS__) {
+            window.__PIXI_DEVTOOLS__ = {
+                app
+            };
+        }
+        
+        // Dispatch custom event for devtools detection
+        window.dispatchEvent(new CustomEvent('__PIXI_APP_INIT__', { detail: { app } }));
+
+        // Create a red circle
+        const circle = new PIXI.Graphics();
+        circle.beginFill(0xe74c3c);
+        circle.drawCircle(0, 0, 50);
+        circle.endFill();
+        circle.x = 150;
+        circle.y = 150;
+        circle.interactive = true;
+        app.stage.addChild(circle);
+
+        // Create a blue rectangle
+        const rectangle = new PIXI.Graphics();
+        rectangle.beginFill(0x3498db);
+        rectangle.drawRect(0, 0, 100, 80);
+        rectangle.endFill();
+        rectangle.x = 350;
+        rectangle.y = 200;
+        rectangle.interactive = true;
+        app.stage.addChild(rectangle);
+
+        // Create a green star
+        const star = new PIXI.Graphics();
+        star.beginFill(0x2ecc71);
+        const points = 5;
+        const outerRadius = 60;
+        const innerRadius = 30;
+        star.moveTo(0, -outerRadius);
+        for (let i = 0; i < points * 2; i++) {
+            const radius = i % 2 === 0 ? outerRadius : innerRadius;
+            const angle = (Math.PI / points) * i - Math.PI / 2;
+            star.lineTo(Math.cos(angle) * radius, Math.sin(angle) * radius);
+        }
+        star.endFill();
+        star.x = 600;
+        star.y = 150;
+        star.interactive = true;
+        app.stage.addChild(star);
+
+        // Create text
+        const text = new PIXI.Text('Hello PIE!', {
+            fontFamily: 'Arial',
+            fontSize: 48,
+            fill: 0x9b59b6,
+            fontWeight: 'bold'
+        });
+        text.x = 250;
+        text.y = 400;
+        text.anchor.set(0.5);
+        text.interactive = true;
+        app.stage.addChild(text);
+
+        // Create a sprite with a simple texture
+        const sprite = new PIXI.Graphics();
+        sprite.beginFill(0xf39c12);
+        sprite.drawPolygon([
+            0, -40,
+            40, 0,
+            0, 40,
+            -40, 0
+        ]);
+        sprite.endFill();
+        sprite.x = 150;
+        sprite.y = 450;
+        sprite.interactive = true;
+        app.stage.addChild(sprite);
+
+        // Register all objects with PIE extension
+        // Wait a bit for the extension to load
+        setTimeout(() => {
+            if (window.___PIE___) {
+                window.___PIE___.ADD(circle);
+                window.___PIE___.ADD(rectangle);
+                window.___PIE___.ADD(star);
+                window.___PIE___.ADD(text);
+                window.___PIE___.ADD(sprite);
+                console.log('✓ PIE Extension detected! All objects registered.');
+                console.log('✓ Use F/D keys to cycle through objects.');
+            } else {
+                console.warn('⚠ PIE Extension not detected. Make sure it is loaded in Chrome!');
+            }
+        }, 1000);
+
+        // Add simple animation
+        app.ticker.add(() => {
+            // Gentle rotation animation
+            circle.rotation += 0.01;
+            star.rotation -= 0.01;
+        });
+    </script>
+</body>
+</html>
