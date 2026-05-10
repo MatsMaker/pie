@@ -11,6 +11,10 @@ How use
         next item - key 'f'
         prev item - key 'd'
 
+    Pixi DevTools Integration:
+        Automatically syncs with objects selected in Pixi DevTools via $pixi
+        Selected objects will blink and become editable in PIE
+
 */
 
 function editTool() {
@@ -214,6 +218,40 @@ function editTool() {
   targetListener.addEventListener("keydown", onSetMod);
   targetListener.addEventListener("keyup", onUnsetMod);
 
+  // Auto-sync with Pixi DevTools $pixi selection
+  let lastPixiSelection = null;
+  
+  function syncWithPixiDevTools() {
+    const currentPixiSelection = window.$pixi;
+    
+    // Check if $pixi changed and is a valid DisplayObject (not stage)
+    if (currentPixiSelection && 
+        currentPixiSelection !== lastPixiSelection &&
+        currentPixiSelection.position !== undefined &&
+        currentPixiSelection !== window.__PIXI_STAGE__ &&
+        currentPixiSelection !== window.__PIXI_APP__?.stage) {
+      
+      // Check if this object is already in editObjects
+      const existingIndex = editState.editObjects.indexOf(currentPixiSelection);
+      
+      if (existingIndex !== -1) {
+        // Object exists, just switch to it
+        editState.activeItemIndex = existingIndex;
+      } else {
+        // New object, add it and make it active
+        editState.editObjects.push(currentPixiSelection);
+        editState.activeItemIndex = editState.editObjects.length - 1;
+      }
+      
+      lastPixiSelection = currentPixiSelection;
+      blinkActiveItem();
+      console.log("PIE: Auto-synced with Pixi DevTools selection", currentPixiSelection);
+    }
+  }
+  
+  // Check for $pixi changes every 500ms
+  setInterval(syncWithPixiDevTools, 500);
+
   return {
     ADD: function (item) {
       editState.editObjects.push(item);
@@ -221,6 +259,7 @@ function editTool() {
     SET: function (item) {
       editState.editObjects = [item];
     }.bind(this),
+    SYNC: syncWithPixiDevTools.bind(this),
   };
 }
 window.___PIE___ = editTool();
