@@ -10,9 +10,9 @@
 
 ## Preview
 
-<video src="preview.mp4" controls width="100%" style="max-width: 800px;">
-  Your browser does not support the video tag.
-</video>
+[![PIE Demo Video](https://img.youtube.com/vi/cwUaDd4eZjE/maxresdefault.jpg)](https://youtu.be/cwUaDd4eZjE)
+
+[Watch demo on YouTube](https://youtu.be/cwUaDd4eZjE)
 
 ## How install
 
