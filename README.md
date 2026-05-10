@@ -8,6 +8,12 @@
 - Automatic integration with Pixi.js DevTools
 - Manifest V3 compliant
 
+## Preview
+
+<video src="preview.mp4" controls width="100%" style="max-width: 800px;">
+  Your browser does not support the video tag.
+</video>
+
 ## How install
 
 Download and install as Chrome extension:
