@@ -10,7 +10,7 @@
 
 ## Preview
 
-[![PIE Demo Video](https://img.youtube.com/vi/cwUaDd4eZjE/maxresdefault.jpg)](https://youtu.be/cwUaDd4eZjE)
+[![PIE Demo Video](preview-image.png)](https://youtu.be/cwUaDd4eZjE)
 
 [Watch demo on YouTube](https://youtu.be/cwUaDd4eZjE)
 
